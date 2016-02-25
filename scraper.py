@@ -26,10 +26,10 @@ THREADS = 2
 class Immospider(Spider):
     def __init__(self):
         super(Immospider, self).__init__(thread_number=THREADS, network_try_limit=20)
-        self.result_file = csv.writer(open('result.txt', 'w'))
+        self.result_file = csv.writer(open('result.csv', 'w'))
         self.result_file.writerow(['Title', 'Address', 'Wohnungstyp', 'Etage', 'Wohnflaeche', 'Bezugsfrei_ab',
                                   'Zimmer', 'Haustiere', 'Kaltmiete', 'Nebenkosten', 'Heizkosten', 'Gesamtmiete',
-                                  'Kaution_o_genossenschaftsanteile'])
+                                  'Kaution_o_genossenschaftsanteile', 'URL'])
 
     def task_generator(self):
 
@@ -38,7 +38,7 @@ class Immospider(Spider):
         a = g.xpath_list('//select[@class="select font-standard"]')[0]
         pages = len(a.getchildren())
 
-        for number in xrange(10):
+        for number in xrange(25, 50):
         # for number in xrange(pages+1):
             url = MAIN_LINK.format(number)
             yield Task('initial', url=url)
@@ -108,8 +108,11 @@ class Immospider(Spider):
         except IndexError:
              kaution_o_genossenschaftsanteile = ' '
 
-        self.result_file.writerow([title, address, wohnungstyp, etage, wohnflaeche, bezugsfrei_ab, zimmer, haustiere, kaltmiete,
-                                  nebenkosten, heizkosten, gesamtmiete, kaution_o_genossenschaftsanteile])
+        self.result_file.writerow([title.encode('utf-8'), address.encode('utf-8'), wohnungstyp.encode('utf-8'),
+                                   etage.encode('utf-8'), wohnflaeche.encode('utf-8'), bezugsfrei_ab.encode('utf-8'),
+                                   zimmer.encode('utf-8'), haustiere.encode('utf-8'), kaltmiete.encode('utf-8'),
+                                   nebenkosten.encode('utf-8'), heizkosten.encode('utf-8'), gesamtmiete.encode('utf-8'),
+                                   kaution_o_genossenschaftsanteile.encode('utf-8'), task.url])
 
 
 def main():
