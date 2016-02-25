@@ -51,22 +51,62 @@ class Immospider(Spider):
             self.add_task(Task(name='get_data', url=url))
 
     def task_get_data(self, grab, task):
-        title = grab.doc.select('//h1[@id="expose-title"]')[0].text()
-        address = grab.doc.select('//div[@class="address-block"]')[0].text()
+        try:
+            title = grab.doc.select('//h1[@id="expose-title"]')[0].text()
+        except IndexError:
+            title = ' '
+        try:
+            address = grab.doc.select('//div[@class="address-block"]')[0].text()
+        except IndexError:
+            address = ' '
         address = ''.join(address.split(' (zur Karte)'))    # garbage text
 
-        wohnungstyp = grab.doc.select('//dd[@class="is24qa-wohnungstyp grid-item three-fifths"]')[0].text()
-        etage = grab.doc.select('//dd[@class="is24qa-etage grid-item three-fifths"]')[0].text()
-        wohnflaeche = grab.doc.select('//dd[@class="is24qa-wohnflaeche-ca grid-item three-fifths"]')[0].text()
-        bezugsfrei_ab = grab.doc.select('//dd[@class="is24qa-bezugsfrei-ab grid-item three-fifths"]')[0].text()
-        zimmer = grab.doc.select('//dd[@class="is24qa-zimmer grid-item three-fifths"]')[0].text()
-        haustiere = grab.doc.select('//dd[@class="is24qa-haustiere grid-item three-fifths"]')[0].text()
-        kaltmiete = grab.doc.select('//dd[@class="is24qa-kaltmiete grid-item three-fifths"]')[0].text()
-        nebenkosten = grab.doc.select('//dd[@class="is24qa-nebenkosten grid-item three-fifths"]')[0].text()
-        heizkosten = grab.doc.select('//dd[@class="is24qa-heizkosten grid-item three-fifths"]')[0].text()
-        gesamtmiete = grab.doc.select('//dd[@class="is24qa-gesamtmiete grid-item three-fifths font-bold"]')[0].text()
-        kaution_o_genossenschaftsanteile = grab.doc.select(
+        try:
+            wohnungstyp = grab.doc.select('//dd[@class="is24qa-wohnungstyp grid-item three-fifths"]')[0].text()
+        except IndexError:
+            wohnungstyp = ' '
+
+        try:
+            etage = grab.doc.select('//dd[@class="is24qa-etage grid-item three-fifths"]')[0].text()
+        except IndexError:
+            etage = ' '
+        try:
+            wohnflaeche = grab.doc.select('//dd[@class="is24qa-wohnflaeche-ca grid-item three-fifths"]')[0].text()
+        except IndexError:
+            wohnflaeche = ' '
+        try:
+            bezugsfrei_ab = grab.doc.select('//dd[@class="is24qa-bezugsfrei-ab grid-item three-fifths"]')[0].text()
+        except IndexError:
+            bezugsfrei_ab = ' '
+        try:
+            zimmer = grab.doc.select('//dd[@class="is24qa-zimmer grid-item three-fifths"]')[0].text()
+        except IndexError:
+            zimmer = ' '
+        try:
+            haustiere = grab.doc.select('//dd[@class="is24qa-haustiere grid-item three-fifths"]')[0].text()
+        except IndexError:
+            haustiere = ' '
+        try:
+            kaltmiete = grab.doc.select('//dd[@class="is24qa-kaltmiete grid-item three-fifths"]')[0].text()
+        except IndexError:
+            kaltmiete = ' '
+        try:
+            nebenkosten = grab.doc.select('//dd[@class="is24qa-nebenkosten grid-item three-fifths"]')[0].text()
+        except IndexError:
+            nebenkosten = ' '
+        try:
+            heizkosten = grab.doc.select('//dd[@class="is24qa-heizkosten grid-item three-fifths"]')[0].text()
+        except IndexError:
+            heizkosten = ' '
+        try:
+            gesamtmiete = grab.doc.select('//dd[@class="is24qa-gesamtmiete grid-item three-fifths font-bold"]')[0].text()
+        except IndexError:
+             gesamtmiete = ' '
+        try:
+            kaution_o_genossenschaftsanteile = grab.doc.select(
             '//dd[@class="is24qa-kaution-o-genossenschaftsanteile is24-ex-spacelink grid-item three-fifths"]')[0].text()
+        except IndexError:
+             kaution_o_genossenschaftsanteile = ' '
 
         self.result_file.writerow([title, address, wohnungstyp, etage, wohnflaeche, bezugsfrei_ab, zimmer, haustiere, kaltmiete,
                                   nebenkosten, heizkosten, gesamtmiete, kaution_o_genossenschaftsanteile])
